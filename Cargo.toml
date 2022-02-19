@@ -1,0 +1,10 @@
+[package]
+name = "projectRust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ggez = "0.7.0"
+nalgebra = "0.29.0"
+glam = { version = "0.20", features = ["mint"]}
+rand = "0.8.4"
