@@ -178,7 +178,7 @@ impl MainState {
 impl event::EventHandler<ggez::GameError> for MainState {
     fn update(&mut self, _ctx: &mut Context) -> GameResult {
         if self.freeze == false {
-            self.time_x = self.time_x % self.screen_width + 0.3;
+            self.time_x = self.time_x % self.screen_width + 5.0;
         }
 
         Ok(())
@@ -380,7 +380,7 @@ impl event::EventHandler<ggez::GameError> for MainState {
                 graphics::draw(
                     ctx,
                     &text_lifeline_skip_question,
-                    (Vec2::new(555.0, 415.0),),
+                    (Vec2::new(545.0, 415.0),),
                 )?;
             } else {
                 let text_lifeline_skip_question = graphics::Text::new("Not active");
@@ -547,63 +547,56 @@ impl event::EventHandler<ggez::GameError> for MainState {
                 Color::BLUE,
             )?;
             graphics::draw(ctx, &rect, (Vec2::new(0.0, 0.0),))?;
-            let text_game_over = graphics::Text::new("GAME OVER!");
-            let slash = graphics::Text::new("/");
-            let text_correct_answers =
-                graphics::Text::new(String::from(self.correct_answers.to_string()));
-            let text_number_answered_questions = graphics::Text::new(String::from(
-                (self.correct_answers + self.incorrect_answers).to_string(),
-            ));
+
             self.is_game_over = true;
-            graphics::draw(ctx, &text_game_over, (Vec2::new(500.0, 200.0),))?;
-            graphics::draw(ctx, &text_correct_answers, (Vec2::new(510.0, 270.0),))?;
-            graphics::draw(ctx, &slash, (Vec2::new(540.0, 270.0),))?;
-            graphics::draw(
-                ctx,
-                &text_number_answered_questions,
-                (Vec2::new(560.0, 270.0),),
-            )?;
+            let text_game_over = graphics::Text::new("GAME OVER!");
+            let text_pos: f32 = (self.screen_width - "GAME OVER!".len() as f32 * 9.0) / 2.0;
+            graphics::draw(ctx, &text_game_over, (Vec2::new(text_pos, 200.0),))?;
+
+            let mut correct_string: String = self.correct_answers.to_string().to_owned();
+            let slash : String = "/".to_owned();
+            let all_string : String = (self.correct_answers + self.incorrect_answers).to_string();
+            correct_string.push_str(&slash);
+            correct_string.push_str(&all_string);
+            let text_pos_result: f32 = (self.screen_width - correct_string.len() as f32 * 9.0) / 2.0;
+            let text_correct = graphics::Text::new(String::from(correct_string));
+            graphics::draw(ctx, &text_correct, (Vec2::new(text_pos_result, 270.0),))?;
+
 
             if self.incorrect_answers == 0
                 && self.correct_answers != 0
                 && self.correct_answers != self.questions.len()
             {
                 let text_no_mistakes = graphics::Text::new(
-                    "Perfect! Now try answering more questions for the same time!",
-                );
-                graphics::draw(ctx, &text_no_mistakes, (Vec2::new(350.0, 330.0),))?;
+                    "Perfect! Now try answering more questions for the same time!",);
+                let text_pos: f32 = (self.screen_width - "Perfect! Now try answering more questions for the same time!".len() as f32 * 9.0) / 2.0;
+                graphics::draw(ctx, &text_pos, (Vec2::new(text_pos_no_mistakes, 330.0),))?;
             } else {
                 if self.correct_answers == self.questions.len() {
                     let text_all_questions_answered = graphics::Text::new(
-                        "Amazing! You answered all questions correctly! Come back later and we might have new questions for you!",
-                    );
-                    graphics::draw(
-                        ctx,
-                        &text_all_questions_answered,
-                        (Vec2::new(150.0, 330.0),),
-                    )?;
+                        "Amazing! You answered all questions correctly! Come back later and we might have new questions for you!");
+                    let text_pos: f32 = (self.screen_width - "Amazing! You answered all questions correctly! Come back later and we might have new questions for you!".len() as f32 * 9.0) / 2.0;
+                    graphics::draw(ctx,&text_all_questions_answered,(Vec2::new(text_pos, 330.0),), )?;
                 } else {
                     if self.correct_answers > self.incorrect_answers {
-                        let text_more_correct =
-                            graphics::Text::new("Good! Now try answering more questions correct!");
-                        graphics::draw(ctx, &text_more_correct, (Vec2::new(350.0, 330.0),))?;
+                        let text_more_correct = graphics::Text::new(
+                            "Good! Now try answering more questions correct!");
+                        let text_pos: f32 = (self.screen_width - "Good! Now try answering more questions correct!".len() as f32 * 9.0) / 2.0;
+                        graphics::draw(ctx, &text_more_correct, (Vec2::new(text_pos, 330.0),))?;
                     } else {
                         if self.correct_answers == self.incorrect_answers
                             && self.correct_answers != 0
                         {
                             let text_equal = graphics::Text::new("Half way there!");
-                            graphics::draw(ctx, &text_equal, (Vec2::new(475.0, 330.0),))?;
+                            let text_pos: f32 = (self.screen_width - "Half way there!".len() as f32 * 9.0) / 2.0;
+                            graphics::draw(ctx, &text_equal, (Vec2::new(text_pos, 330.0),))?;
                         } else {
                             if self.correct_answers < self.incorrect_answers
                                 || self.incorrect_answers + self.correct_answers == 0
                             {
-                                let text_more_incorrect =
-                                    graphics::Text::new("Try again! You can do better!");
-                                graphics::draw(
-                                    ctx,
-                                    &text_more_incorrect,
-                                    (Vec2::new(450.0, 330.0),),
-                                )?;
+                                let text_more_incorrect = graphics::Text::new("Try again! You can do better!");
+                                let text_pos: f32 = (self.screen_width - "Try again! You can do better!".len() as f32 * 9.0) / 2.0;
+                                graphics::draw(ctx, &text_more_incorrect, (Vec2::new(text_pos, 330.0),),)?;
                             }
                         }
                     }
@@ -624,7 +617,6 @@ impl event::EventHandler<ggez::GameError> for MainState {
 
         Ok(())
     }
-
 
 }
 
